@@ -49,6 +49,30 @@ Pra atualizar depois:
 cd ~/.claude/skills/daquele-jeito && git pull
 ```
 
+### Windows (PowerShell)
+
+Os comandos acima assumem bash/zsh (funcionam direto em Git Bash, WSL, macOS, Linux). Em **PowerShell nativo** (Windows), `~` não expande do jeito esperado em todos os contextos — use `$env:USERPROFILE`:
+
+**Opção 1 — `Invoke-WebRequest`:**
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\skills\daquele-jeito" | Out-Null
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/beralzir/daquele-jeito/main/SKILL.md `
+  -OutFile "$env:USERPROFILE\.claude\skills\daquele-jeito\SKILL.md"
+```
+
+**Opção 2 — `git clone`:**
+
+```powershell
+git clone https://github.com/beralzir/daquele-jeito.git "$env:USERPROFILE\.claude\skills\daquele-jeito"
+```
+
+Pra atualizar (Opção 2):
+
+```powershell
+Set-Location "$env:USERPROFILE\.claude\skills\daquele-jeito"; git pull
+```
+
 ## Verificar instalação
 
 Em uma sessão Claude Code (terminal), digita `/` no input — `/daquele-jeito` deve aparecer no autocomplete.
@@ -63,8 +87,16 @@ Resposta esperada: abre com *"Vou fazer daquele jeito o planejamento..."* seguid
 
 ## Desinstalação
 
+Bash/zsh:
+
 ```bash
 rm -rf ~/.claude/skills/daquele-jeito
+```
+
+PowerShell:
+
+```powershell
+Remove-Item -Recurse -Force "$env:USERPROFILE\.claude\skills\daquele-jeito"
 ```
 
 ---
@@ -73,7 +105,7 @@ rm -rf ~/.claude/skills/daquele-jeito
 
 Este é um Claude Code skill que precisa ser instalado em `~/.claude/skills/daquele-jeito/SKILL.md` na máquina do usuário. Se o usuário pediu pra você instalar a partir desta URL:
 
-1. **Use a Opção 1 (curl) acima** — é um único arquivo, idempotente, simples de executar
+1. **Detecte o shell do usuário primeiro.** Se for **PowerShell nativo** (Windows), use os comandos da seção *"Windows (PowerShell)"*. Caso contrário (bash/zsh/Git Bash/WSL/macOS/Linux), use a **Opção 1 (curl)** — é um único arquivo, idempotente, simples de executar
 2. Depois de rodar, sugira ao usuário verificar com `/` no autocomplete em uma sessão `claude` no terminal (não funciona em Claude.ai web — skills de Claude Code são específicas do terminal)
 3. Mencione que a skill se anuncia na primeira ativação com *"Vou fazer daquele jeito o [tipo de trabalho]..."*
 
