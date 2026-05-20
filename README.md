@@ -6,7 +6,7 @@
 
 "Daquele jeito" is a Brazilian Portuguese expression that literally translates as "that way". But in everyday Brazilian usage, "faz daquele jeito" carries more weight than the literal translation — it means roughly "do it the right way, the way you and I both know it should be done". It blends shared understanding ("you know how") with a quality bar ("do it properly").
 
-The closest English idiom in spirit and register is **"do it right"** / **"the right way"** — same casual tone, same combination of shared knowledge and quality expectation. That's why this skill also accepts `/that-way` and `do it that way` as English triggers, while keeping `daquele jeito` as its identity.
+The closest English idiom in spirit and register is **"do it right"** / **"the right way"** — same casual tone, same combination of shared knowledge and quality expectation. That's why this skill also accepts `/that-way` as a slash command alias, while keeping `daquele jeito` as its identity. (The phrase trigger stays Portuguese-only — see [How to invoke](#how-to-invoke-after-installing) for why.)
 
 ## What this skill does
 
@@ -27,15 +27,13 @@ For large projects (>~5 steps), it plans in macro phases and details only the cu
 
 In any Claude Code session:
 
-- **Slash command:** `/daquele-jeito [your request]` or `/that-way [your request]`
-- **Invocation phrase (Portuguese):** end (or start) your prompt with `faz daquele jeito` or `faça daquele jeito` (case-insensitive). E.g.:
+- **Slash command:** `/daquele-jeito [your request]` or `/that-way [your request]` (depending on which folder you installed to — see [Installation](#installation))
+- **Invocation phrase:** end (or start) your prompt with `faz daquele jeito` or `faça daquele jeito` (case-insensitive). E.g.:
   > *"I want to build a financial management SaaS. [long project description]. Faz daquele jeito."*
-- **Invocation phrase (English):** end (or start) your prompt with `do it that way` or `just do it that way`. E.g.:
-  > *"I want to build a financial management SaaS. [long project description]. Do it that way."*
 
-The skill announces itself on the first activation in the conversation with a line like *"Doing the planning daquele jeito..."* — so you know it triggered. The announcement always uses *daquele jeito* (the skill's identity), regardless of which language you triggered in.
+The skill announces itself on the first activation in the conversation with a line like *"Doing the planning daquele jeito..."* — so you know it triggered.
 
-> **Heads up on the English trigger:** "do it that way" is much more common in everyday English than "faz daquele jeito" is in Portuguese, so the skill applies stricter disambiguation — it activates only when the phrase is the final standalone imperative of your message, not when it appears mid-sentence describing a method. When in doubt, use the slash command.
+> **Why the phrase trigger is Portuguese-only:** the literal English equivalent ("do it that way") is too common in everyday speech — it would activate on accident every time someone said "you should do it that way" in passing. The Portuguese phrase "faz daquele jeito" is distinctive enough that false activations are rare. For English-speaking teammates, the `/that-way` slash command is unambiguous and works just as well.
 
 ## Installation
 
@@ -109,10 +107,10 @@ Quick behavioral test:
 faz daquele jeito I need to plan a simple todo list app
 ```
 
-Or in English:
+Or, using the slash command:
 
 ```
-I need to plan a simple todo list app. Do it that way.
+/that-way I need to plan a simple todo list app
 ```
 
 Expected response: opens with *"Doing the planning daquele jeito..."* followed by a round of structured questions (stack, scope, etc.) before any plan.
