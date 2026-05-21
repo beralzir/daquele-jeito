@@ -6,7 +6,7 @@
 
 "Daquele jeito" is a Brazilian Portuguese expression that literally translates as "that way". But in everyday Brazilian usage, "faz daquele jeito" carries more weight than the literal translation — it means roughly "do it the right way, the way you and I both know it should be done". It blends shared understanding ("you know how") with a quality bar ("do it properly").
 
-The closest English idiom in spirit and register is **"do it right"** / **"the right way"** — same casual tone, same combination of shared knowledge and quality expectation. That's why this skill also accepts `/that-way` as a slash command alias, while keeping `daquele jeito` as its identity. (The phrase trigger stays Portuguese-only — see [How to invoke](#how-to-invoke-after-installing) for why.)
+The closest English idiom in spirit and register is **"do it right"** / **"the right way"** — same casual tone, same combination of shared knowledge and quality expectation. That's why this skill also accepts English invocation patterns — `/that-way` slash command and phrase triggers like `do it right`, `the right way`, `do it that way`, `just do it that way` — while keeping `daquele jeito` as its identity. The English phrase triggers are more ambiguous than the Portuguese one (they're common in everyday speech), so the skill applies stricter disambiguation when it sees them — see [How to invoke](#how-to-invoke-after-installing) for the rules.
 
 ## What this skill does
 
@@ -27,13 +27,24 @@ For large projects (>~5 steps), it plans in macro phases and details only the cu
 
 In any Claude Code session:
 
-- **Slash command:** `/daquele-jeito [your request]` or `/that-way [your request]` (depending on which folder you installed to — see [Installation](#installation))
-- **Invocation phrase:** end (or start) your prompt with `faz daquele jeito` or `faça daquele jeito` (case-insensitive). E.g.:
+- **Slash commands:** `/daquele-jeito [your request]` or `/that-way [your request]` (depending on which folder you installed to — see [Installation](#installation))
+- **Invocation phrase (Portuguese):** end (or start) your prompt with `faz daquele jeito` or `faça daquele jeito` (case-insensitive). E.g.:
   > *"I want to build a financial management SaaS. [long project description]. Faz daquele jeito."*
+- **Invocation phrase (English):** end (or start) your prompt with one of `do it right`, `the right way`, `do it that way`, or `just do it that way`. E.g.:
+  > *"I want to build a financial management SaaS. [long project description]. Do it right."*
 
-The skill announces itself on the first activation in the conversation with a line like *"Doing the planning daquele jeito..."* — so you know it triggered.
+The skill announces itself on the first activation in the conversation with a line like *"Doing the planning daquele jeito..."* — so you know it triggered. The announcement keeps *daquele jeito* (the skill's identity) regardless of which trigger you used.
 
-> **Why the phrase trigger is Portuguese-only:** the literal English equivalent ("do it that way") is too common in everyday speech — it would activate on accident every time someone said "you should do it that way" in passing. The Portuguese phrase "faz daquele jeito" is distinctive enough that false activations are rare. For English-speaking teammates, the `/that-way` slash command is unambiguous and works just as well.
+> **Heads up on the English triggers:** "do it right", "the right way", "do it that way", and "just do it that way" are common in everyday English speech, so the skill applies stricter disambiguation — it activates only when the phrase appears as a **bare imperative** (final or standalone instruction), not when it's:
+> - **descriptive** — *"this is the right way to handle errors"*, *"the right way to deploy is X"*
+> - **conditional** — *"if we do it the right way, it takes longer"*
+> - **past tense** — *"you did it right yesterday"*, *"they did it that way last sprint"*
+> - **negated** — *"don't do it that way"*
+> - **expressing intent** — *"I want to do it right"*, *"we should do it the right way"*, *"I'm trying to do it right"*
+> - **a reference to a prior method** — *"do it the right way we discussed"*, *"do it that way we agreed on"*
+> - **a meta-question** — *"how do you do it right in React?"*, *"what does 'the right way' mean here?"*
+>
+> When in doubt, use the slash command (`/daquele-jeito` or `/that-way`) — slashes are unambiguous.
 
 ## Installation
 
@@ -107,7 +118,13 @@ Quick behavioral test:
 faz daquele jeito I need to plan a simple todo list app
 ```
 
-Or, using the slash command:
+Or in English:
+
+```
+I need to plan a simple todo list app. Do it right.
+```
+
+Or via slash command:
 
 ```
 /that-way I need to plan a simple todo list app
