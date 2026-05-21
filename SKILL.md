@@ -1,6 +1,11 @@
 ---
 name: daquele-jeito
-description: "Workflow for non-trivial execution projects — plan-first with structured questions, visible progress, 4-axis audit, improvement loop, calibrated effort, bug autonomy, subagents. ACTIVATE when: (1) user invokes the /daquele-jeito or /that-way slash command, OR (2) a trigger phrase appears as a BARE IMPERATIVE — a final or standalone instruction meaning 'apply this workflow to the request above/below'. Trigger phrases (case-insensitive): Portuguese 'faz daquele jeito' / 'faça daquele jeito'; English 'do it right' / 'the right way' / 'do it that way' / 'just do it that way'. DO NOT ACTIVATE when the phrase is: (a) negated ('don't do it that way', 'não faz daquele jeito'); (b) conditional ('if we do it the right way it takes longer', 'se fizer daquele jeito'); (c) past tense ('you did it right yesterday', 'você fez daquele jeito ontem'); (d) modal/volitional intent ('I want to do it right', 'we should do it the right way'); (e) descriptive copular ('this is the right way to handle errors', 'the right way to deploy is X'); (f) followed by qualifiers referencing a prior method ('do it the right way we discussed', 'faz daquele jeito alternativo'); (g) meta-question ('how do you do it right in React?', 'como funciona o faz daquele jeito?'). The English triggers are common everyday phrases — apply disambiguation MORE strictly for English; when in any doubt, prefer the unambiguous slash command. WHEN IN DOUBT, DO NOT ACTIVATE."
+description: |
+  Use this skill when the user wants a non-trivial task executed with a rigorous workflow: plan-first with a checklist, round of clarifying questions, visible progress, 4-axis audit (functional/regression/hygiene/spec), calibrated effort, and bug-investigation autonomy. Applies to code, infra, content, or design work.
+
+  TRIGGER when: (1) the user invokes `/daquele-jeito` or `/that-way`; OR (2) the user attaches a trigger phrase as a final/standalone instruction to a concrete task request. Trigger phrases (case-insensitive): Portuguese "faz daquele jeito" / "faça daquele jeito"; English "do it right" / "the right way" / "do it that way". When one of these phrases closes a pragmatic task request ("Build X... do it right.", "Rename Y... the right way."), that IS a bare imperative — trigger.
+
+  DO NOT TRIGGER when the phrase is negated, conditional, past tense, modal ("I want to do it right"), a meta-question, or qualified as referring to a different method ("faz daquele jeito alternativo").
 ---
 
 # Daquele-jeito — workflow for execution projects
