@@ -1,142 +1,142 @@
 ---
 name: daquele-jeito
-description: "Workflow para projetos de execução não-triviais — plan-first com bateria de perguntas, progresso visível, auditoria em 4 eixos, loop de melhoria, calibrar esforço, autonomia em bugs, subagentes. ATIVAR APENAS quando: (1) usuário invoca via /daquele-jeito, OU (2) a frase 'faz daquele jeito' / 'faça daquele jeito' (case-insensitive) aparece como IMPERATIVO DE INVOCAÇÃO no prompt — tipicamente como instrução final/standalone, com sentido 'aplique este workflow ao pedido acima/abaixo'. Posição típica: nas últimas linhas após o usuário descrever o projeto, ou abrindo um novo pedido. ATIVA: 'Quero criar um SaaS de X. [descrição longa]. Faz daquele jeito.' (instrução final), 'Faça daquele jeito o setup do projeto', 'Faz daquele jeito: criar X'. NÃO ATIVA: 'faz daquele jeito alternativo que mencionei' (referência a método discutido), 'não faz daquele jeito' (negação), 'se fizer daquele jeito...' (condicional), 'você fez daquele jeito ontem' (passado), 'como funciona o faz daquele jeito?' (meta-pergunta). Regra prática: frase seguida por qualificadores (alternativo, anterior, que [verbo], daquele outro) ou precedida por negação/condicional/tempo passado = REFERÊNCIA, não invocação. EM DÚVIDA, NÃO ATIVE — usuário pode invocar explícito via /daquele-jeito."
+description: "Workflow for non-trivial execution projects — plan-first with structured questions, visible progress, 4-axis audit, improvement loop, calibrated effort, bug autonomy, subagents. ACTIVATE when: (1) user invokes the /daquele-jeito or /that-way slash command, OR (2) a trigger phrase appears as a BARE IMPERATIVE — a final or standalone instruction meaning 'apply this workflow to the request above/below'. Trigger phrases (case-insensitive): Portuguese 'faz daquele jeito' / 'faça daquele jeito'; English 'do it right' / 'the right way' / 'do it that way' / 'just do it that way'. DO NOT ACTIVATE when the phrase is: (a) negated ('don't do it that way', 'não faz daquele jeito'); (b) conditional ('if we do it the right way it takes longer', 'se fizer daquele jeito'); (c) past tense ('you did it right yesterday', 'você fez daquele jeito ontem'); (d) modal/volitional intent ('I want to do it right', 'we should do it the right way'); (e) descriptive copular ('this is the right way to handle errors', 'the right way to deploy is X'); (f) followed by qualifiers referencing a prior method ('do it the right way we discussed', 'faz daquele jeito alternativo'); (g) meta-question ('how do you do it right in React?', 'como funciona o faz daquele jeito?'). The English triggers are common everyday phrases — apply disambiguation MORE strictly for English; when in any doubt, prefer the unambiguous slash command. WHEN IN DOUBT, DO NOT ACTIVATE."
 ---
 
-# Daquele-jeito — workflow para projetos de execução
+# Daquele-jeito — workflow for execution projects
 
-Aplique este workflow ao pedido do usuário e a todo trabalho subsequente nesta conversa. Aplica-se a tarefas estruturais — código, infra, conteúdo, design.
+Apply this workflow to the user's request and to all subsequent work in this conversation. Applies to structural tasks — code, infra, content, design.
 
-**Anúncio de ativação:** na **primeira vez** que este workflow é ativado em uma conversa, abra a resposta com uma frase curta no formato *"Vou fazer daquele jeito o [tipo de trabalho]..."* — ex.: *"Vou fazer daquele jeito o planejamento desse SaaS..."*, *"Vou fazer daquele jeito o fix desse bug..."*, *"Vou fazer daquele jeito a análise comparativa..."*. Em ativações seguintes na mesma conversa, **não repita** — usuário já sabe que está ativa.
+**Activation announcement:** the **first time** this workflow is activated in a conversation, open the response with a short sentence in the format *"Doing the [type of work] daquele jeito..."* — e.g. *"Doing the SaaS planning daquele jeito..."*, *"Doing the bug fix daquele jeito..."*, *"Doing the comparative analysis daquele jeito..."*. In subsequent activations within the same conversation, **don't repeat** — user already knows it's active.
 
 ## 1. Plan-first
 
-Ativar este workflow é sinal de que o usuário quer planejamento. **Sempre** desenhe plano antes de executar, independente do tamanho aparente da tarefa.
+Activating this workflow signals that the user wants planning. **Always** draft a plan before executing, regardless of the apparent size of the task.
 
-### 1.1 Bateria de perguntas antes do plano
+### 1.1 Round of questions before the plan
 
-NUNCA assuma quando: (a) o pedido admite mais de um caminho razoável, (b) você não sabe qual o usuário quer, e (c) escolher errado custa retrabalho. Pergunte.
+NEVER assume when: (a) the request admits more than one reasonable path, (b) you don't know which one the user wants, and (c) choosing wrong costs rework. Ask.
 
-O que costuma disparar pergunta:
-- **Stack/lib** quando há mais de uma escolha viável (ex.: três libs de OAuth, dois ORMs)
-- **Requisito ambíguo** (o que conta como X? Y é parte do escopo?)
-- **Interpretação** (usuário disse "rápido" — latência? throughput? tempo até pronto?)
-- **Restrição não-óbvia** (budget, dependências externas, compatibilidade)
+What typically triggers a question:
+- **Stack/lib** when there's more than one viable choice (e.g. three OAuth libs, two ORMs)
+- **Ambiguous requirement** (what counts as X? Is Y part of scope?)
+- **Interpretation** (user said "fast" — latency? throughput? time to ship?)
+- **Non-obvious constraint** (budget, external dependencies, compatibility)
 
-Formato das perguntas:
-- Uma por vez quando der pra ser pergunta de clique (até 4 opções)
-- Batch numerado curto se forem interdependentes (responder em conjunto faz sentido)
-- Cada pergunta tem que mudar materialmente o plano — se a resposta não muda nada, corte
+Question format:
+- One at a time when it can be a click-question (up to 4 options)
+- Short numbered batch if they're interdependent (answering together makes sense)
+- Each question must materially change the plan — if the answer changes nothing, cut it
 
-**Não pergunte** o que `grep`, `cat`, `find` ou Read direto resolve (ver §6). Pergunte só o que o usuário sabe e o repo não responde.
+**Don't ask** what `grep`, `cat`, `find` or a direct Read solves (see §6). Ask only what the user knows and the repo doesn't answer.
 
-### 1.2 Plano
+### 1.2 Plan
 
-Checklist na conversa, com critério de "done" por passo. Cada item deve ter:
-- **Escopo claro** — uma frase do que muda
-- **Done verificável** — output, teste, comando, link (cf. §3)
-- **Suposições explícitas** quando houver, marcadas (ex.: *"assumindo Postgres + Drizzle"*)
+Checklist in the conversation, with a "done" criterion per step. Each item should have:
+- **Clear scope** — one sentence on what changes
+- **Verifiable done** — output, test, command, link (cf. §3)
+- **Explicit assumptions** when present, marked (e.g. *"assuming Postgres + Drizzle"*)
 
-Se discovery prévio (grep/read em §6) informou o plano, mencione brevemente — dá ao usuário visibilidade do que embasou as decisões.
+If prior discovery (grep/read in §6) informed the plan, mention it briefly — gives the user visibility into what backed the decisions.
 
-**Projetos grandes (>~5 etapas previstas):** esboce **fases macro** primeiro (1-3 fases, uma frase de descrição cada) e detalhe o checklist completo **apenas da fase em curso**. Quando a fase atual fechar, detalhe a próxima. Evita plano de 30 itens que envelhece antes de ser executado.
+**Large projects (>~5 anticipated steps):** sketch **macro phases** first (1-3 phases, one-sentence description each) and detail the full checklist **only for the current phase**. When the current phase closes, detail the next one. Avoids a 30-item plan that ages out before it's executed.
 
-**Research/análise:** para comparações, investigações, recomendações, o plano é a **abordagem investigativa** (que fontes, que dimensões), não checklist de construção. "Done por etapa" = pergunta respondida com evidência.
+**Research/analysis:** for comparisons, investigations, recommendations, the plan is the **investigative approach** (which sources, which dimensions), not a construction checklist. "Done per step" = question answered with evidence.
 
-### 1.3 Validação
+### 1.3 Validation
 
-Apresente o plano, pergunte explicitamente se aprova ou ajusta. **Não execute** sem sinal afirmativo. Se o usuário só responder "vai" ou "ok" sem revisar, proceda com as suposições marcadas como `[assumed]` no plano — não silenciosamente.
+Present the plan, explicitly ask whether the user approves or adjusts it. **Don't execute** without an affirmative signal. If the user just replies "go" or "ok" without reviewing, proceed with the assumptions marked as `[assumed]` in the plan — not silently.
 
-**Por quê tudo isso:** corrigir plano custa minutos; corrigir código pronto custa horas. Ativar este workflow é a forma do usuário pedir essa proteção explicitamente — desonrar o pedido executando direto é a falha mais cara que ele previne.
+**Why all this:** fixing a plan costs minutes; fixing finished code costs hours. Activating this workflow is the user's way of asking for that protection explicitly — dishonoring the request by executing straight away is the most expensive failure it prevents.
 
-## 2. Progresso visível
+## 2. Visible progress
 
-Sinalize a cada **etapa concluída**:
+Signal each **completed step**:
 
-- **Etapa** = um item do checklist do §1 (quando houver plano) ou, em tarefas menores sem plano formal, um sub-objetivo verificável.
-- **Concluída** = o critério de "done" daquele item foi atingido com a prova exigida por §3 (output, teste, link, comando rodado).
+- **Step** = a checklist item from §1 (when there's a plan) or, in smaller tasks without a formal plan, a verifiable sub-goal.
+- **Completed** = the "done" criterion for that item has been met with the proof required by §3 (output, test, link, command run).
 
-Formato do update: 1-2 frases sobre o que ficou pronto, sem relatório longo. Se houver checklist visível na conversa, atualize o item de `[ ]` pra `[x]` ao sinalizar.
+Update format: 1-2 sentences on what's done, no long report. If there's a visible checklist in the conversation, update the item from `[ ]` to `[x]` when signaling.
 
-Exemplo: *"✓ Etapa 1 (setup Auth.js): instalado, `auth.ts` configurado, middleware adicionado. `auth()` em server component retorna null como esperado. Indo pra etapa 2."*
+Example: *"✓ Step 1 (Auth.js setup): installed, `auth.ts` configured, middleware added. `auth()` in server component returns null as expected. Moving to step 2."*
 
-Ao final do trabalho, bloco curto de review: o que mudou, por quê, o que ficou em aberto.
+At the end of the work, short review block: what changed, why, what's still open.
 
-**Se discovery durante execução invalidar uma etapa ou suposição** (`[assumed]` que não se sustentou, dependência que não existe, escopo que cresceu): pause. Não force o plano original. Proponha amendment — qual etapa muda, por quê, qual impacto nas seguintes — e valide com o usuário antes de prosseguir.
+**If discovery during execution invalidates a step or assumption** (`[assumed]` that didn't hold up, a dependency that doesn't exist, scope that grew): pause. Don't force the original plan. Propose an amendment — which step changes, why, what's the impact on the following ones — and validate with the user before proceeding.
 
-## 3. Verificação antes de "feito" (auditoria)
+## 3. Verification before "done" (audit)
 
-"Feito" é uma declaração auditável, não uma sensação. Antes de marcar qualquer etapa como concluída, passe pelos quatro eixos abaixo com **mentalidade de quem busca problemas, não de quem busca confirmação**.
+"Done" is an auditable declaration, not a feeling. Before marking any step as complete, run through the four axes below with **the mindset of someone looking for problems, not seeking confirmation**.
 
-Cada eixo recebe resposta explícita: **passou**, **não se aplica** (com motivo), ou **falhou** (com plano).
+Each axis gets an explicit answer: **passed**, **not applicable** (with reason), or **failed** (with a plan).
 
-### Os quatro eixos
+### The four axes
 
-1. **Funcional** — a coisa faz o que devia? Teste automatizado cobriu e passou (cite qual), ou demo manual com input/output mostrado.
+1. **Functional** — does the thing do what it should? Automated test covered and passed (cite which), or manual demo with input/output shown.
 
-2. **Regressão** — não quebrou nada adjacente? Suite/lint/type-check/build do projeto, todos verdes. Se algum check existia e você não rodou, declare por quê — não omita.
+2. **Regression** — didn't break anything adjacent? Project suite/lint/type-check/build, all green. If a check existed and you didn't run it, declare why — don't omit.
 
-3. **Higiene** — o diff/output está limpo? Sem `console.log` de debug, sem credenciais, sem comentários `TODO_REMOVE`, sem imports ou código morto. Diff bate com o escopo da etapa, sem mudanças "de carona" (cf. §8 cirúrgico).
+3. **Hygiene** — is the diff/output clean? No debug `console.log`, no credentials, no `TODO_REMOVE` comments, no dead imports or dead code. Diff matches the step's scope, no "drive-by" changes (cf. §8 surgical).
 
-4. **Especificação** — entrega o que foi pedido? Todos os critérios de done do item do plano §1 foram tocados — releia o item antes de marcar `[x]`. Suposições `[assumed]` ainda valem; se discovery invalidou alguma, sinalize antes do done.
+4. **Specification** — does it deliver what was asked? All done criteria from the §1 plan item have been touched — re-read the item before marking `[x]`. `[assumed]` assumptions still hold; if discovery invalidated any, flag before done.
 
-### Formato da auditoria
+### Audit format
 
-Bloco curto antes de marcar `[x]` — uma linha por eixo, com evidência concreta:
+Short block before marking `[x]` — one line per axis, with concrete evidence:
 
-> **Auditoria etapa N:**
-> - Funcional: ✓ `npm test -- auth.test.ts` passou (4/4)
-> - Regressão: ✓ `npm test` (87/87), `tsc --noEmit` limpo
-> - Higiene: ✓ diff revisado, sem debug logs ou TODOs marcados
-> - Especificação: ✓ critério "`auth()` em server component retorna null" verificado
+> **Step N audit:**
+> - Functional: ✓ `npm test -- auth.test.ts` passed (4/4)
+> - Regression: ✓ `npm test` (87/87), `tsc --noEmit` clean
+> - Hygiene: ✓ diff reviewed, no debug logs or flagged TODOs
+> - Specification: ✓ criterion "`auth()` in server component returns null" verified
 
-Se algum eixo falhou ou não foi checado, **não marque [x]** — entregue o relatório com o status real e proponha próximo passo (corrigir, escalar pro usuário, ou marcar como limitação aceita explicitamente).
+If any axis failed or wasn't checked, **don't mark [x]** — deliver the report with the real status and propose the next step (fix, escalate to user, or mark as an explicitly accepted limitation).
 
-### Teste interno antes da auditoria
+### Internal test before the audit
 
-Pergunte-se: *"um revisor sênior aprovaria isso?"*. Se a resposta é "talvez" ou "depois de mais um polimento", refaça antes — não depois.
+Ask yourself: *"would a senior reviewer approve this?"*. If the answer is "maybe" or "after one more polish", redo before — not after.
 
-## 4. Loop de melhoria
+## 4. Improvement loop
 
-Antes de propor registrar uma lição, confirme com o usuário se é padrão recorrente ou caso isolado. Erros pontuais viram regras congeladas que envelhecem mal — não compensam o ruído.
+Before proposing to record a lesson, confirm with the user whether it's a recurring pattern or an isolated case. One-off mistakes become frozen rules that age badly — not worth the noise.
 
-Se for recorrente, proponha **onde** registrar com base no escopo real. Registrar no nível errado é o que mais polui memória ao longo do tempo:
+If recurring, propose **where** to record based on the real scope. Recording at the wrong level is what pollutes memory most over time:
 
-- Vale só em arquivos específicos → `.claude/rules/<nome>.md` com `paths:` no frontmatter
-- Vale no projeto inteiro, time todo → `.claude/CLAUDE.md` (committed)
-- Vale no projeto, só o usuário → `CLAUDE.local.md` (gitignored)
-- Vale em todos os projetos do usuário → `~/.claude/CLAUDE.md`
+- Applies only to specific files → `.claude/rules/<name>.md` with `paths:` in frontmatter
+- Applies to the whole project, entire team → `.claude/CLAUDE.md` (committed)
+- Applies to the project, only the user → `CLAUDE.local.md` (gitignored)
+- Applies across all the user's projects → `~/.claude/CLAUDE.md`
 
-Auto memory (Claude Code v2.1.59+, se habilitada) já captura algumas lições sozinha. Antes de propor registro manual, vale checar se duplica algo que a auto memory pegaria.
+Auto memory (Claude Code v2.1.59+, if enabled) already captures some lessons on its own. Before proposing manual recording, worth checking if it duplicates something auto memory would catch.
 
-## 5. Calibrar esforço à tarefa
+## 5. Calibrate effort to the task
 
-Dois failure modes pra evitar:
+Two failure modes to avoid:
 
-- **Gambiarra (under-engineering):** Fix rápido que resolve o sintoma mas deixa dívida técnica silenciosa. Vai acumulando até o código ficar frágil sem ninguém perceber.
-- **Over-engineering:** Resposta desproporcional ao problema. Refatorar três arquivos pra consertar um typo, ou criar abstração pra coisa com um único caso de uso.
+- **Kludge (under-engineering):** Quick fix that resolves the symptom but leaves silent technical debt. Accumulates until the code becomes fragile without anyone noticing.
+- **Over-engineering:** Disproportionate response to the problem. Refactoring three files to fix a typo, or creating an abstraction for something with a single use case.
 
-Regras práticas:
+Practical rules:
 
-- Fix trivial → a menor mudança que resolve. Não escale.
-- Mudança não-trivial → antes de codar, pergunte-se "qual a versão mais simples que não vira gambiarra?".
-- Se um hack aparecer no meio do fix → pause. Descreva a versão limpa, pergunte ao usuário se refaz agora ou aceita o workaround com `TODO` explícito. Não esconda gambiarras dentro de um diff sem flagar.
-- Para código descartável (script one-off, exploração): elegância não é o objetivo. Mínimo que funciona.
+- Trivial fix → the smallest change that solves it. Don't escalate.
+- Non-trivial change → before coding, ask yourself "what's the simplest version that doesn't become a kludge?".
+- If a hack appears mid-fix → pause. Describe the clean version, ask the user whether to redo now or accept the workaround with an explicit `TODO`. Don't hide kludges inside a diff without flagging.
+- For throwaway code (one-off script, exploration): elegance isn't the goal. Minimum that works.
 
-## 6. Autonomia em bugs
+## 6. Bug autonomy
 
-Bug com erro/log claro: diagnostique e proponha o fix direto, sem pedir permissão pra começar a investigar. Em CC isso significa usar Read, Grep, Bash, Git log diretamente — zero context-switching exigido do usuário só pra você arrancar.
+Bug with a clear error/log: diagnose and propose the fix directly, no asking permission to start investigating. In CC that means using Read, Grep, Bash, Git log directly — zero context-switching required from the user just for you to get going.
 
-## 7. Subagentes
+## 7. Subagents
 
-Use o `Task` tool quando precisar: (a) varrer múltiplas fontes ou ângulos em paralelo, (b) isolar contexto pesado pra não poluir o main thread, ou (c) ter uma segunda passagem independente — ex.: subagente A acha o bug, subagente B valida o fix sem ter visto a diagnose.
+Use the `Task` tool when you need to: (a) scan multiple sources or angles in parallel, (b) isolate heavy context so it doesn't pollute the main thread, or (c) get an independent second pass — e.g. subagent A finds the bug, subagent B validates the fix without having seen the diagnosis.
 
-Cada subagente tem contexto próprio; não compartilham com você nem entre si. Spawn todos os da mesma rodada no mesmo turno (paralelismo de verdade) e sintetize só depois que todos voltarem — não interprete parcialmente no meio.
+Each subagent has its own context; they don't share with you nor with each other. Spawn all from the same round in the same turn (real parallelism) and synthesize only after they all return — don't interpret partially in the middle.
 
-Se houver subagentes especializados em `.claude/agents/`, prefira-os ao `Task` genérico: foram desenhados pro caso e tendem a ter prompts melhor calibrados.
+If there are specialized subagents in `.claude/agents/`, prefer them over the generic `Task`: they were designed for the case and tend to have better-calibrated prompts.
 
-## 8. Princípios
+## 8. Principles
 
-- **Simplicidade primeiro:** a menor mudança que resolve, com o menor impacto no resto.
-- **Root cause, não band-aid:** se o sintoma some mas a causa fica, o bug volta em outro lugar.
-- **Cirúrgico:** toque só o necessário; não refatore o que não foi pedido. Se vir algo errado no caminho, sinalize ao usuário em vez de "consertar de carona".
+- **Simplicity first:** the smallest change that solves it, with the smallest impact on the rest.
+- **Root cause, not band-aid:** if the symptom disappears but the cause stays, the bug comes back somewhere else.
+- **Surgical:** touch only what's necessary; don't refactor what wasn't asked. If you see something wrong along the way, flag it to the user instead of "fixing it drive-by".
