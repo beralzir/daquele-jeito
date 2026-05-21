@@ -78,10 +78,12 @@ Or, to install as `/that-way`:
 git clone https://github.com/beralzir/daquele-jeito.git ~/.claude/skills/that-way
 ```
 
-To update later (use whichever folder you chose):
+To update later, `cd` into whichever folder you installed to and pull:
 
 ```bash
 cd ~/.claude/skills/daquele-jeito && git pull
+# or, if you installed as /that-way:
+cd ~/.claude/skills/that-way && git pull
 ```
 
 ### Windows (PowerShell)
@@ -102,7 +104,7 @@ Invoke-WebRequest -Uri https://raw.githubusercontent.com/beralzir/daquele-jeito/
 git clone https://github.com/beralzir/daquele-jeito.git "$env:USERPROFILE\.claude\skills\daquele-jeito"
 ```
 
-To update (Option 2):
+To update (Option 2) — swap `daquele-jeito` for `that-way` if that's where you installed:
 
 ```powershell
 Set-Location "$env:USERPROFILE\.claude\skills\daquele-jeito"; git pull
@@ -133,6 +135,8 @@ Or via slash command:
 Expected response: opens with *"Doing the planning daquele jeito..."* followed by a round of structured questions (stack, scope, etc.) before any plan.
 
 ## Uninstallation
+
+Swap `daquele-jeito` for `that-way` in the paths below if that's where you installed.
 
 Bash/zsh:
 
