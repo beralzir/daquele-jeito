@@ -35,7 +35,18 @@ Question format:
 
 **Don't ask** what `grep`, `cat`, `find` or a direct Read solves (see §6). Ask only what the user knows and the repo doesn't answer.
 
-### 1.2 Plan
+### 1.2 Access manifest — front-load the approvals
+
+Before firing any discovery read (the grep/cat/find/Read of §1.1 and §6), resolve **in one pass** every external resource the task will touch and surface them together — so the human approves a known set once, instead of fielding a trickle of prompts mid-thought. A skill is only prompt: it **cannot** make the harness merge permission pop-ups into a single click. What it *can* do is stop scattering them.
+
+1. **Enumerate from the request first.** Parse the user's prompt for every concrete path, repo, URL, domain, and MCP server it already names. Most accesses are explicit in the ask — don't rediscover them one read at a time.
+2. **Declare the manifest.** State them in one short block: *"This touches: `~/dir/a`, repo `x/y`, `domain.com`, MCP `z`."* If discovery will likely surface more, say so — don't pretend the list is final.
+3. **Batch the discovery.** Fire the opening reads/greps as a single parallel round (one turn, multiple tool calls), not pinged out across the plan. Clustered prompts beat scattered ones even when each still prompts.
+4. **Offer to persist the recurring ones.** When the same folders/domains prompt session after session, the real fix lives in `~/.claude/settings.json` (`permissions.allow`, `additionalDirectories`) or in `/fewer-permission-prompts` — not in the conversation. Offer to add them once so next time they don't prompt at all. Don't edit settings without the human's ok — it's outside the project and changes harness behavior.
+
+Mandatory whenever planning involves reading outside the working directory, fetching URLs, or hitting repos/MCP — i.e. almost always.
+
+### 1.3 Plan
 
 Checklist in the conversation, with a "done" criterion per step. Each item should have:
 - **Clear scope** — one sentence on what changes
@@ -48,7 +59,7 @@ If prior discovery (grep/read in §6) informed the plan, mention it briefly — 
 
 **Research/analysis:** for comparisons, investigations, recommendations, the plan is the **investigative approach** (which sources, which dimensions), not a construction checklist. "Done per step" = question answered with evidence.
 
-### 1.3 Validation
+### 1.4 Validation
 
 Present the plan, explicitly ask whether the user approves or adjusts it. **Don't execute** without an affirmative signal. If the user just replies "go" or "ok" without reviewing, proceed with the assumptions marked as `[assumed]` in the plan — not silently.
 
@@ -131,6 +142,8 @@ Practical rules:
 ## 6. Bug autonomy
 
 Bug with a clear error/log: diagnose and propose the fix directly, no asking permission to start investigating. In CC that means using Read, Grep, Bash, Git log directly — zero context-switching required from the user just for you to get going.
+
+That autonomy is to *start moving*, not to trickle out access prompts: when you go read directly, front-load it as one declared batch (§1.2) rather than a dozen separate approvals.
 
 ## 7. Subagents
 
