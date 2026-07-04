@@ -29,8 +29,8 @@ What typically triggers a question:
 - **Non-obvious constraint** (budget, external dependencies, compatibility)
 
 Question format:
-- One at a time when it can be a click-question (up to 4 options)
-- Short numbered batch if they're interdependent (answering together makes sense)
+- **DEFAULT to `AskUserQuestion` (click-question) for ANY decision reducible to ≤4 discrete options.** Use inline text ONLY for genuinely open-ended questions (no enumerable options). Before asking anything inline, run the check: *"could this be ≤4 options?"* — if yes, use `AskUserQuestion`. This default holds for the **ENTIRE session, including late turns — do not let it decay.** (These skill instructions are injected once and attenuate as the conversation grows; hold this one anyway.)
+- Short numbered batch when the options are interdependent (answering together makes sense) — still one `AskUserQuestion` call when each fits ≤4 options.
 - Each question must materially change the plan — if the answer changes nothing, cut it
 
 **Don't ask** what `grep`, `cat`, `find` or a direct Read solves (see §6). Ask only what the user knows and the repo doesn't answer.
