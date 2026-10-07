@@ -80,11 +80,15 @@ At the end of the work, short review block: what changed, why, what's still open
 
 **If discovery during execution invalidates a step or assumption** (`[assumed]` that didn't hold up, a dependency that doesn't exist, scope that grew): pause. Don't force the original plan. Propose an amendment — which step changes, why, what's the impact on the following ones — and validate with the user before proceeding.
 
+**Context handoff is part of the plan.** The harness (portas-em-automatico global hooks) sends `[context-gauge]` lines: from 50% of the window by default the handoff window is open, and you pick the best cut point before the 80% ceiling from what comes next, such as before a long step or when a milestone closes. The ceiling is a limit, not a target. A ceiling line, a `[compact-reanchor]` line or a compaction already visible in this conversation means now. At the cut: close the step in progress, update the checklist and `SESSION.md`, commit the registry files if the user's rules say so, and open the fresh session: where a tool spawns a new session or task (a session chip), create it with a self-contained resume prompt, otherwise give that prompt in a block to paste. Don't start the next step first.
+
 ## 3. Verification before "done" (audit)
 
 "Done" is an auditable declaration, not a feeling. Before marking any step as complete, run through the four axes below with **the mindset of someone looking for problems, not seeking confirmation**.
 
 Each axis gets an explicit answer: **passed**, **not applicable** (with reason), or **failed** (with a plan).
+
+A subagent's report is a claim, not evidence. Before marking a delegated step `[x]`, read its diff or re-run its check yourself.
 
 ### The four axes
 
@@ -144,11 +148,15 @@ Bug with a clear error/log: diagnose and propose the fix directly, no asking per
 
 That autonomy is to *start moving*, not to trickle out access prompts: when you go read directly, front-load it as one declared batch (§1.2) rather than a dozen separate approvals.
 
-## 7. Subagents
+## 7. Subagents: the main thread orchestrates
 
-Use the subagent tool when you need to: (a) scan multiple sources or angles in parallel, (b) isolate heavy context so it doesn't pollute the main thread, or (c) get an independent second pass — e.g. subagent A finds the bug, subagent B validates the fix without having seen the diagnosis.
+The main thread is the orchestrator. It holds the dialogue with the user, the approved plan, the decisions and the final audit, and it delegates by default whenever a step would flood its context and delegating costs no quality: (a) scan multiple sources or angles in parallel, (b) isolate heavy context (several files, long transcripts, docs, logs) so it doesn't pollute the main thread, (c) get an independent second pass — e.g. subagent A finds the bug, subagent B validates the fix without having seen the diagnosis, or (d) run long mechanical work with a verifiable done criterion. If the step depends on nuance of this conversation that a brief can't carry, keep it in the main thread: quality beats context savings.
 
-Each subagent has its own context; they don't share with you nor with each other. Spawn all from the same round in the same turn (real parallelism) and synthesize only after they all return — don't interpret partially in the middle.
+Keep in the main thread: questions to the user (subagents can't ask, so their doubts come back to you and you batch them per §1.1), plan approval, architecture decisions, git commit and push, publishing, anything irreversible, and trivial steps (one response, one or two files), where a subagent's startup costs more than it saves.
+
+**Brief contract:** a subagent sees none of this conversation. Every brief carries the goal and the step's done criterion (§1.3), the decisions already made and the `[assumed]` items, exact paths, what it may and may not change, which opt-in skills the user authorized for that step (none named means invoke none), and the return format: short, paths and evidence, no file dumps.
+
+Each subagent has its own context; they don't share with you nor with each other. Spawn all from the same round in the same turn (real parallelism) and synthesize only after they all return — don't interpret partially in the middle. Two parallel subagents never write the same file.
 
 **Fan-out contract:** every research subagent in the batch gets the same short contract: declare your knowledge cutoff; tag each claim [fact]/[inference]/[hypothesis]; write "not confirmed" instead of guessing; cite sources with URL + date; return in the same fixed sections. Uniform returns make synthesis mechanical instead of interpretive.
 

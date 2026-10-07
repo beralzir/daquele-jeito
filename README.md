@@ -19,7 +19,8 @@ When activated, it transforms Claude Code's default behavior into a structured w
 - **Visible progress** — signals each completed step; proposes amendments when discovery invalidates the plan
 - **Effort calibration** — avoids kludge and over-engineering simultaneously
 - **Bug autonomy** — diagnoses directly via Read/Grep/Bash, no asking permission to investigate
-- **Parallel subagents** when it makes sense (multi-source research, context isolation)
+- **Main thread orchestrates**: delegates heavy reads, parallel research, independent review and long mechanical work to subagents with a full brief, and keeps the user dialogue, decisions, git and the final audit
+- **Handoff before compaction**: when the context gauge hook of [`portas-em-automatico`](https://github.com/beralzir/portas-em-automatico) opens the handoff window, picks the cut point before the ceiling, closes the step and opens a fresh session with a self-contained resume prompt (a session chip where the environment offers one)
 - **Improvement loop** — proposes recording lessons at the right layers (`.claude/rules/`, `CLAUDE.md`, etc.)
 
 For large projects (>~5 steps), it plans in macro phases and details only the current phase. For research/analysis, the plan becomes an "investigative approach", not a construction checklist.
