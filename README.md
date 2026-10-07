@@ -13,7 +13,8 @@ The closest English idiom in spirit and register is **"do it right"** / **"the r
 When activated, it transforms Claude Code's default behavior into a structured workflow for non-trivial work:
 
 - **Plan-first** — drafts a checklist-style plan with a "done" criterion per step before executing
-- **Access manifest** — before discovery, names every folder, repo, and URL the task touches and front-loads the reads in one batch, so approval prompts cluster instead of trickling — and offers to persist the recurring ones to your `settings.json` allowlist
+- **Access manifest** — before discovery, names every folder, repo, and URL the task touches and front-loads the reads in one batch, so approval prompts cluster instead of trickling, and names the exact rule for prompts that keep coming back so you can add it yourself (it never edits your permission settings on its own)
+- **Web research budget**: past ~10 web calls, or any external site in a browser, the plan states the volume, the domains and the browser sites, puts the site approvals in the plan-approval question while you're present, designs the research for few prompts, and marks what was skipped or denied as "not consulted" instead of stalling
 - **Round of questions** — asks what `grep` can't answer before planning; never assumes between multiple viable paths
 - **4-axis audit** (Functional / Regression / Hygiene / Specification) before marking any step as complete
 - **Visible progress** — signals each completed step; proposes amendments when discovery invalidates the plan

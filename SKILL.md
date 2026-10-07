@@ -42,7 +42,12 @@ Before firing any discovery read (the grep/cat/find/Read of §1.1 and §6), reso
 1. **Enumerate from the request first.** Parse the user's prompt for every concrete path, repo, URL, domain, and MCP server it already names. Most accesses are explicit in the ask — don't rediscover them one read at a time.
 2. **Declare the manifest.** State them in one short block: *"This touches: `~/dir/a`, repo `x/y`, `domain.com`, MCP `z`."* If discovery will likely surface more, say so — don't pretend the list is final.
 3. **Batch the discovery.** Fire the opening reads/greps as a single parallel round (one turn, multiple tool calls), not pinged out across the plan. Clustered prompts beat scattered ones even when each still prompts.
-4. **Offer to persist the recurring ones.** When the same folders/domains prompt session after session, the real fix lives in `~/.claude/settings.json` (`permissions.allow`, `additionalDirectories`) or in `/fewer-permission-prompts` — not in the conversation. Offer to add them once so next time they don't prompt at all. Don't edit settings without the human's ok — it's outside the project and changes harness behavior.
+4. **Name the lasting fix, the human applies it.** For folders or domains that prompt session after session, name the exact rule, e.g. `WebFetch(domain:*.example.com)`, and where it goes: `/permissions`, `/fewer-permission-prompts`, or `--allowedTools` at launch for one session. Never write permission settings yourself unless the human's own message asks for that exact change: auto mode denies anything less as self-modification.
+5. **Budget heavy web research.** Past ~10 web calls, or any external site in a browser, the plan states an access budget:
+   - **Volume and channel.** Searches, fetches and their domains, and each browser site. In auto mode `WebSearch` and `WebFetch` don't prompt. In Manual every call does unless a rule allows it, so offer auto mode for the step. A browser prompts per site and per subdomain, and on flagged clicks or keystrokes in any mode.
+   - **Few prompts by design.** Search first, fetch only decisive pages, one source per question. Browser only where a fetch can't read, a results URL over clicking and typing, every browser site in one agent and one block.
+   - **One approval moment.** Fold the budget, with the number of site cards to expect, into the plan-approval question while the human is present: browser block now (the per-site option keeps a site's card from returning, the one-time option doesn't), at their next presence, or skipped.
+   - **Degrade, don't stall.** A pending prompt holds the agent until answered, so unless the human picked "now", skip every browser site they haven't approved. Whatever is skipped, denied or blocked becomes "not consulted" with the reason, never a retry through another tool or agent: 3 classifier denials in a row, or 20 per session, pause auto mode.
 
 Mandatory whenever planning involves reading outside the working directory, fetching URLs, or hitting repos/MCP — i.e. almost always.
 
@@ -57,7 +62,7 @@ If prior discovery (grep/read in §6) informed the plan, mention it briefly — 
 
 **Large projects (>~5 anticipated steps):** sketch **macro phases** first (1-3 phases, one-sentence description each) and detail the full checklist **only for the current phase**. When the current phase closes, detail the next one. Avoids a 30-item plan that ages out before it's executed.
 
-**Research/analysis:** for comparisons, investigations, recommendations, the plan is the **investigative approach** (which sources, which dimensions), not a construction checklist. "Done per step" = question answered with evidence.
+**Research/analysis:** for comparisons, investigations, recommendations, the plan is the **investigative approach** (which sources, which dimensions, the §1.2 access budget when it applies), not a construction checklist. "Done per step" = question answered with evidence.
 
 ### 1.4 Validation
 
@@ -154,11 +159,11 @@ The main thread is the orchestrator. It holds the dialogue with the user, the ap
 
 Keep in the main thread: questions to the user (subagents can't ask, so their doubts come back to you and you batch them per §1.1), plan approval, architecture decisions, git commit and push, publishing, anything irreversible, and trivial steps (one response, one or two files), where a subagent's startup costs more than it saves.
 
-**Brief contract:** a subagent sees none of this conversation. Every brief carries the goal and the step's done criterion (§1.3), the decisions already made and the `[assumed]` items, exact paths, what it may and may not change, which opt-in skills the user authorized for that step (none named means invoke none), and the return format: short, paths and evidence, no file dumps.
+**Brief contract:** a subagent sees none of this conversation. Every brief carries the goal and the step's done criterion (§1.3), the decisions already made and the `[assumed]` items, exact paths, what it may and may not change, which opt-in skills the user authorized for that step (none named means invoke none), for a web step its access budget (§1.2), and the return format: short, paths and evidence, no file dumps.
 
 Each subagent has its own context; they don't share with you nor with each other. Spawn all from the same round in the same turn (real parallelism) and synthesize only after they all return — don't interpret partially in the middle. Two parallel subagents never write the same file.
 
-**Fan-out contract:** every research subagent in the batch gets the same short contract: declare your knowledge cutoff; tag each claim [fact]/[inference]/[hypothesis]; write "not confirmed" instead of guessing; cite sources with URL + date; return in the same fixed sections. Uniform returns make synthesis mechanical instead of interpretive.
+**Fan-out contract:** every research subagent in the batch gets the same short contract: declare your knowledge cutoff; tag each claim [fact]/[inference]/[hypothesis]; write "not confirmed" instead of guessing; cite sources with URL + date; return in the same fixed sections. It also keeps to its access budget (no browser site outside it) and marks whatever it skipped or was denied as "not consulted" with the reason. Uniform returns make synthesis mechanical instead of interpretive.
 
 If there are specialized subagents in `.claude/agents/`, prefer them over the generic one: they were designed for the case and tend to have better-calibrated prompts.
 
