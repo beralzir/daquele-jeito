@@ -70,6 +70,8 @@ Present the plan, explicitly ask whether the user approves or adjusts it. **Don'
 
 **Why:** fixing a plan costs minutes; fixing finished work costs hours — activating this workflow is an explicit request for that protection.
 
+**Plan too big for one round of four click-questions:** if the `detonado` skill is installed, say in one line of text that its plan-approval board can hold the approval (the user opens it with "detonado, abre a prancheta do plano"). It's manual-only: never invoke it yourself. Once the board is open, the approval that counts is the one confirmed there.
+
 ## 2. Visible progress
 
 Signal each **completed step**:

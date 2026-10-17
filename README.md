@@ -24,7 +24,7 @@ When activated, it transforms Claude Code's default behavior into a structured w
 - **Handoff before compaction**: when the context gauge hook of [`portas-em-automatico`](https://github.com/beralzir/portas-em-automatico) opens the handoff window, picks the cut point before the ceiling, closes the step and opens a fresh session with a self-contained resume prompt (a session chip where the environment offers one)
 - **Improvement loop** — proposes recording lessons at the right layers (`.claude/rules/`, `CLAUDE.md`, etc.)
 
-For large projects (>~5 steps), it plans in macro phases and details only the current phase. For research/analysis, the plan becomes an "investigative approach", not a construction checklist.
+For large projects (>~5 steps), it plans in macro phases and details only the current phase. When a plan carries more decisions than four click-questions hold and [`detonado`](https://github.com/beralzir/detonado) is installed, it suggests that skill's plan-approval board in one line of text and never invokes it. For research/analysis, the plan becomes an "investigative approach", not a construction checklist.
 
 ## How to invoke (after installing)
 
